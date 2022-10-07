@@ -5,8 +5,12 @@ const { response } = require('express')
 const express = require('express')
 const app = express()
 
+
+// below are variables for what you want to search (keywords within specific elements on a page.) & an array of URL's to search within.
+const searchCriteria = 'p:contains("Technical")'
 const url = ['https://www.pghcareerconnector.com/jobs/']
 
+//forEach loops through the above URL's and axios/cheerio parse the data within the elements
 url.forEach(element => {
   axios(element)
   .then(response => {
@@ -14,17 +18,17 @@ url.forEach(element => {
     const $ = cheerio.load(html)
     const languages = []
   
-    $('html:contains("Print")', html).each(function() {
-      const language = $(this).text()
+    $(searchCriteria, html).each(function() {
+      const language_Reference = $(this).text()
       
       languages.push({
-        language,
+        language_Reference,
         
       })
     })
     console.log(languages)
-    const numOfLanguages = languages.length
-    console.log(numOfLanguages)
+    const numOfReferences = languages.length
+    console.log(`Number of References: ${numOfReferences}`)
   }).catch(err => console.log(err))
 })
 
